@@ -9,12 +9,10 @@ import redis
 import tushare as ts
 from concurrent import futures
 from utils.time_util import time_cut
+from data.market import get_basics_tickers
 
 red = redis.Redis(host='localhost')
-
-stock_basics = ts.get_stock_basics()
-tickers = stock_basics[(stock_basics['name'].str.find('ST')==-1) & (stock_basics['timeToMarket']>19900101) & (stock_basics['timeToMarket']<20190101)
-            & (stock_basics['npr']>0)].index.values.tolist()
+tickers = get_basics_tickers()
 
 MAX_WORKERS = 30
 executor = futures.ThreadPoolExecutor(max_workers=MAX_WORKERS)
